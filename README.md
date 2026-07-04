@@ -7,12 +7,11 @@ pasta do tópico correspondente. Os prefixos numéricos preservam a ordem didát
 
 ```
 01-matematica-discreta-logica-formal/
-├── 01-logica-booleana-proposicional/
-├── 02-tabelas-verdade-operadores-equivalencias/
-├── 03-conjuntos-relacoes-funcoes/
-├── 04-combinatoria-contagem/
-├── 05-inducao-matematica/
-└── 06-teoria-dos-grafos/
+├── 01-logica-booleana-proposicional/   (operadores, tabelas-verdade, equivalências)
+├── 02-conjuntos-relacoes-funcoes/
+├── 03-combinatoria-contagem/
+├── 04-inducao-matematica/
+└── 05-teoria-dos-grafos/               (representação e travessia)
 
 02-design-clean-code/
 ├── 01-nomes-funcoes-legibilidade/
@@ -23,9 +22,6 @@ pasta do tópico correspondente. Os prefixos numéricos preservam a ordem didát
 ├── 06-solid/
 └── 07-design-patterns-gof/
 ```
-
-> Tópicos opcionais de matemática (probabilidade, estatística, álgebra linear, cálculo)
-> serão adicionados só quando o domínio pedir.
 
 ## Como rodar um exercício
 

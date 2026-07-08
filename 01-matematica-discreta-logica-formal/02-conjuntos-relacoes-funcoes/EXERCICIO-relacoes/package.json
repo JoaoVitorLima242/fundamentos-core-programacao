@@ -1,0 +1,14 @@
+{
+  "name": "relational-db",
+  "version": "1.0.0",
+  "description": "Desafio: implementar a álgebra relacional (teoria de relações) com classes TS encadeáveis",
+  "type": "module",
+  "scripts": {
+    "check": "tsx src/check.ts",
+    "play": "tsx src/playground.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

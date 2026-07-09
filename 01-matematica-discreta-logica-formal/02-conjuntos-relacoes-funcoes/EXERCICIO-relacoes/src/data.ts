@@ -17,6 +17,18 @@ export const pedidos = Relation.of([
   { pedidoId: 14, usuarioId: 3, valor: 15 },
 ]);
 
-/** Duas relações pequenas pra testar operações de conjunto. */
+/**
+ * Duas relações pequenas pra testar operações de CONJUNTO (union/intersect/except).
+ * Elas compartilham a coluna `x` de propósito: essas operações só fazem sentido
+ * entre relações do MESMO esquema (comparar maçã com maçã).
+ */
 export const A = Relation.of([{ x: 1 }, { x: 2 }, { x: 3 }]);
 export const B = Relation.of([{ x: 3 }, { x: 4 }, { x: 5 }]);
+
+/**
+ * Par para o PRODUTO CARTESIANO (cross). Aqui as colunas são DIFERENTES
+ * (`cor` e `tam`) — assim a fusão { ...a, ...b } não colide, e cada par
+ * combinado fica visível: cor × tamanho.
+ */
+export const cores = Relation.of([{ cor: "vermelho" }, { cor: "azul" }]);
+export const tamanhos = Relation.of([{ tam: "P" }, { tam: "G" }]);

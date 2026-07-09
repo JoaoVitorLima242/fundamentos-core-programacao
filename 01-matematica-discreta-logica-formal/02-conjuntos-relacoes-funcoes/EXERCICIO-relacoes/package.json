@@ -5,9 +5,14 @@
   "type": "module",
   "scripts": {
     "check": "tsx src/check.ts",
-    "play": "tsx src/playground.ts"
+    "check:watch": "tsx watch src/check.ts",
+    "check:v": "VERBOSE=1 tsx src/check.ts",
+    "check:v:watch": "VERBOSE=1 tsx watch src/check.ts",
+    "play": "tsx src/playground.ts",
+    "play:watch": "tsx watch src/playground.ts"
   },
   "devDependencies": {
+    "@types/node": "^26.1.1",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }

@@ -9,7 +9,7 @@
  * ordenamos as duas listas por uma chave canônica antes de comparar.
  */
 import { Relation, Row } from "./Relation";
-import { usuarios, pedidos, A, B } from "./data";
+import { usuarios, pedidos, A, B, cores, tamanhos } from "./data";
 
 // ---- utilidades do verificador -------------------------------------------
 
@@ -48,7 +48,11 @@ const rk = (row: Row) => new RelationExposta([]).key(row);
 
 let ok = 0;
 let done = 0;
-const total = 12;
+const total = 13;
+
+// Modo verboso: mostra o valor RETORNADO de cada método, mesmo quando passa.
+// Ligue com `pnpm check:v` (ou VERBOSE=1). Útil pra inspecionar o que sai.
+const VERBOSE = !!process.env.VERBOSE;
 
 function testar(
   nome: string,
@@ -61,6 +65,7 @@ function testar(
     const passou = ordenado ? sameSeq(got, esperado) : sameSet(got, esperado);
     if (passou) {
       console.log(`✅ ${nome}`);
+      if (VERBOSE) console.log(`   obtido:   ${JSON.stringify(got)}`);
       ok++;
     } else {
       console.log(`❌ ${nome}`);
@@ -112,11 +117,23 @@ testar(
   ]
 );
 
-// 3) project — só nome e cidade (com dedup: SP aparece 2x mas cidade sozinha não)
+// 3) project — nome e cidade (duas chaves; os 4 pares são distintos)
 testar(
-  "project (nome)",
-  () => usuarios.project(["nome"]).toArray(),
-  [{ nome: "Ana" }, { nome: "Bia" }, { nome: "Caio" }, { nome: "Duda" }]
+  "project (nome, cidade)",
+  () => usuarios.project(["nome", "cidade"]).toArray(),
+  [
+    { nome: "Ana", cidade: "SP" },
+    { nome: "Bia", cidade: "RJ" },
+    { nome: "Caio", cidade: "SP" },
+    { nome: "Duda", cidade: "MG" },
+  ]
+);
+
+// 3b) project — só cidade (SP aparece 2x nos dados → dedup DEVE colapsar pra 1)
+testar(
+  "project (cidade) — dedup: SP colapsa",
+  () => usuarios.project(["cidade"]).toArray(),
+  [{ cidade: "SP" }, { cidade: "RJ" }, { cidade: "MG" }]
 );
 
 // 4) union
@@ -135,15 +152,16 @@ testar("intersect (A ∩ B)", () => A.intersect(B).toArray(), [{ x: 3 }]);
 testar("except (A ∖ B)", () => A.except(B).toArray(), [{ x: 1 }, { x: 2 }]);
 testar("except (B ∖ A)", () => B.except(A).toArray(), [{ x: 4 }, { x: 5 }]);
 
-// 7) cross — |A| × |B| = 3 × 3 = 9 pares
+// 7) cross — |cores| × |tamanhos| = 2 × 2 = 4 pares (colunas distintas: sem colisão)
 testar(
-  "cross (A × B) tem 9 linhas",
-  () => {
-    const r = A.cross(B).toArray();
-    // valida só a cardinalidade aqui (o conteúdo é grande)
-    return [{ n: r.length }];
-  },
-  [{ n: 9 }]
+  "cross (cores × tamanhos) = 4 pares",
+  () => cores.cross(tamanhos).toArray(),
+  [
+    { cor: "vermelho", tam: "P" },
+    { cor: "vermelho", tam: "G" },
+    { cor: "azul", tam: "P" },
+    { cor: "azul", tam: "G" },
+  ]
 );
 
 // 8) join — usuarios ⋈ pedidos ON id = usuarioId

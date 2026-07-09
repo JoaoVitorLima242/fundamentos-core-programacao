@@ -127,9 +127,20 @@ export class Relation<T extends Row = Row> {
   // ──────────────────────────────────────────────────────────────
   // 8) join — ⋈ (junção)  |  SQL: JOIN ... ON
   //    Teoria: JOIN = produto cartesiano SEGUIDO de uma seleção.
-  //    É literalmente cross() + select(): forme todos os pares e mantenha
-  //    só os que satisfazem a condição `on`.
-  //    TODO: implementar reaproveitando cross e select (ou com dois loops + if).
+  //
+  //    O QUE RETORNAR: uma Relation com as linhas FUNDIDAS { ...a, ...b } —
+  //    mesmo formato do cross() — mas SÓ dos pares (a, b) em que on(a, b) é true.
+  //    Ex.: usuarios.join(pedidos, (u,p) => u.id === p.usuarioId) devolve
+  //         linhas tipo { id, nome, cidade, pedidoId, usuarioId, valor }.
+  //
+  //    Jeito mais simples: DOIS loops + if (igual ao cross, mas com o filtro):
+  //        for (const a of this.rows)
+  //          for (const b of other.rows)
+  //            if (on(a, b)) result.push({ ...a, ...b });
+  //
+  //    Obs.: NÃO dá pra fazer this.cross(other).select(on) direto, porque o
+  //    `select` passa UMA linha (já fundida) ao predicado, mas `on` espera DOIS
+  //    argumentos (a, b) separados. As assinaturas não batem.
   // ──────────────────────────────────────────────────────────────
   join<U extends Row>(
     other: Relation<U>,
